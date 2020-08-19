@@ -36,5 +36,53 @@ module.exports = {
                 error: error.message
             });
         }
+    },
+
+
+    async spellCastTargetFireWave(req, res) {
+        try {
+            const spellCost = 3;
+            const spellName = 'Огненная волна'
+            const { memberId, memberIndex, roomId } = req.cookies;
+            const room = await Room.findOne({ roomId });
+            const member = room.party[+memberIndex];
+            
+
+            if (member.mp < spellCost) {
+                res.status(200).send({
+                    status: 200,
+                    message: 'У вас недостаточно маны для этого заклинания!'
+                });
+                return;
+            }
+            
+            let log = `Игрок ${member.name} кастанул магию "${spellName}" и нанес следующие уроны: `
+            room.party.forEach((target, index) => {
+                const damage = Math.floor(Math.random()*10) + 1;
+                target.hp -= damage;
+                if (room.party.length - 1 === index) {
+                    log += `${target.name} : ${damage}.`; 
+                    return;
+                }
+                log += `${target.name} : ${damage}, `;
+            });
+            
+            member.mp -= spellCost;
+            room.log.push(log);
+            await room.save();
+            res.status(200).send({
+                status: 200,
+                message: log,
+                room: room
+            });
+
+        } catch(error) {
+            console.log(error.message);
+            res.status(500).send({
+                status: 500,
+                error: error.message
+            });
+        }
     }
+
 }

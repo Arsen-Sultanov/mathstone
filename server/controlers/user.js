@@ -1,14 +1,7 @@
 const Room = require('../models');
 
 module.exports = {
-    async spellCast1(req, res) {
-        try {
-
-        } catch(error) {
-
-        }
-    },
-
+    
     async addMp(req, res) {
         try {
             const { ownerId, roomId } = req.cookies;
