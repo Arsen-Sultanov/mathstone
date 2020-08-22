@@ -9,7 +9,7 @@ app
     .use(express.urlencoded({extended: true}))
     .use(cookieParser())
     .use(express.json())
-    .use(cors({credentials: true, origin: ['http://localhost:3333', 'http://ustaz.tilda.ws'] }))
+    .use(cors({credentials: true, origin: ['http://localhost:3333', 'http://ustaz.tilda.ws', 'http://nositel.kz'] }))
     .use('/api/v1', router);
 
 app.listen(serverPort, (error)=>{
