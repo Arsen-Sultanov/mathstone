@@ -4,8 +4,8 @@ const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
-const privateKey  = fs.readFileSync('./selfsigned.key', 'utf8');
-const certificate = fs.readFileSync('./public-selfsigned.crt', 'utf8');
+const privateKey  = fs.readFileSync('../selfsigned.key', 'utf8');
+const certificate = fs.readFileSync('../public-selfsigned.crt', 'utf8');
 
 
 const services = require('./services');
