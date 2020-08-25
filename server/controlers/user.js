@@ -4,8 +4,7 @@ module.exports = {
     
     async addMp(req, res) {
         try {
-            const { ownerId, roomId } = req.cookies;
-            const { memberIndex } = req.body;
+            const { ownerId, roomId, memberIndex } = req.body;
             const room = await Room.findOne({ roomId });
             if (room.ownerId === ownerId) {
                 room.party[memberIndex].mp += 1;
@@ -36,7 +35,7 @@ module.exports = {
 
     async getMe(req, res) {
         try {
-            const { roomId, memberId, memberIndex } = req.cookies;
+            const { roomId, memberId, memberIndex } = req.body;
             const room = await Room.findOne({ roomId });
             const member = room.party[memberIndex];
             if (memberId === member.memberId) {

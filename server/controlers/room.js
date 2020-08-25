@@ -4,16 +4,15 @@ module.exports = {
     async newRoom(req, res) {
         try {
             let room;
-            console.log(req.cookies);
-            if (req.cookies.ownerId) {
-                room = await Room.findOne({ownerId: req.cookies.ownerId});
+
+            if (req.body.ownerId) {
+                room = await Room.findOne({ownerId: req.body.ownerId});
                 res.status(200).send(room);
                 return;  
             }
             room = new Room();
             await room.save();
-            res.cookie('ownerId', room.ownerId, { expires: new Date(Date.now() + 1000*60*60*24*365), httpOnly: true });
-            res.cookie('roomId', room.roomId, { expires: new Date(Date.now() + 1000*60*60*24*365), httpOnly: true });
+            
             res.status(200).send(room);
         } catch(error) {
             console.log(error.message);
@@ -35,8 +34,8 @@ module.exports = {
                 });
                 return;
             }
-            if (req.cookies.memberId && req.cookies.memberIndex) {
-                const user = room.party[+req.cookies.memberIndex];
+            if (req.body.memberId && req.body.memberIndex) {
+                const user = room.party[+req.body.memberIndex];
                 if (user) {
                     res.status(200).send(room);
                     return;
@@ -44,21 +43,8 @@ module.exports = {
             }
             room.party.push({ name });
             await room.save();
-            res.cookie(
-                'memberId', 
-                room.party[room.party.length - 1].memberId, 
-                { expires: new Date(Date.now() + 1000*60*60*24), httpOnly: true }
-            );
-            res.cookie(
-                'roomId', 
-                room.roomId, 
-                { expires: new Date(Date.now() + 1000*60*60*24), httpOnly: true }
-            );
-            res.cookie(
-                'memberIndex', 
-                room.party.length - 1, 
-                { expires: new Date(Date.now() + 1000*60*60*24), httpOnly: true }
-            );
+            room._doc.memberIndex = room.party.length - 1;
+            console.log(room);
             res.status(200).send(room);
         } catch(error) {
             console.log(error.message);
@@ -71,7 +57,7 @@ module.exports = {
 
     async start(req, res) {
         try{
-            const { roomId, ownerId } = req.cookies;
+            const { roomId, ownerId } = req.body;
             const room = Room.findOne( {roomId} );
             if ( room.ownerId === ownerId ) {
                 room.isStarted = true;

@@ -6,8 +6,7 @@ module.exports = {
         try {
             const spellCost = 1;
             const spellName = 'Огненная искра'
-            const { memberId, memberIndex, roomId } = req.cookies;
-            const { targetIndex } = req.body;
+            const { memberId, memberIndex, roomId, targetIndex } = req.body;
             const room = await Room.findOne({ roomId });
             const member = room.party[+memberIndex];
             const target = room.party[+targetIndex];
@@ -43,7 +42,7 @@ module.exports = {
         try {
             const spellCost = 3;
             const spellName = 'Огненная волна'
-            const { memberId, memberIndex, roomId } = req.cookies;
+            const { memberId, memberIndex, roomId } = req.body;
             const room = await Room.findOne({ roomId });
             const member = room.party[+memberIndex];
             
