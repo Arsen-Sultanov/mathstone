@@ -12,4 +12,5 @@ publicRouter.get('/room/new', room.newRoom);
 publicRouter.post('/room/connect', room.connect);
 publicRouter.post('/room/cast-fireball', spells.spellCastTargetFireball);
 publicRouter.post('/room/cast-firewave', spells.spellCastTargetFireWave);
+publicRouter.post('/room/get', room.getRoom);
 module.exports = publicRouter;
