@@ -58,7 +58,7 @@ module.exports = {
     async start(req, res) {
         try{
             const { roomId, ownerId } = req.body;
-            const room = Room.findOne( {roomId} );
+            const room = await Room.findOne( {roomId} );
             if ( room.ownerId === ownerId ) {
                 room.isStarted = true;
                 await room.save();
@@ -79,5 +79,36 @@ module.exports = {
                 error: error.message
             });
         }
+    },
+
+    async getRoom(req, res) {
+        try{
+            const { roomId, ownerId } = req.body;
+            const room = await Room.findOne({ roomId });
+            if ( !(room.ownerId === ownerId)) {
+                res.status(401).send({
+                    status: 401,
+                    message: 'Вы не являетесь создателем данной комнаты'
+                })
+                return;
+            }
+            if ( room ) {
+                res.status(200).send(room);
+                return;
+            }
+            res.status(404).send({
+                status: 404,
+                message: 'Такой комнаты нет!'
+            });
+        } catch(error){
+            console.log(error.message);
+            res.status(500).send({
+                status: 500,
+                error: error.message
+            });
+        }
     }
+
+
+    
 }
