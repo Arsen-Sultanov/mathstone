@@ -83,8 +83,10 @@ module.exports = {
 
     async getRoom(req, res) {
         try{
+            console.log(req.body);
             const { roomId, ownerId } = req.body;
             const room = await Room.findOne({ roomId });
+            console.log(room);
             if ( !room ) {
                 res.status(404).send({
                     status: 404,
