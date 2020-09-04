@@ -85,21 +85,21 @@ module.exports = {
         try{
             const { roomId, ownerId } = req.body;
             const room = await Room.findOne({ roomId });
-            if ( !(room.ownerId === ownerId)) {
+            if ( !room ) {
+                res.status(404).send({
+                    status: 404,
+                    message: 'Такой комнаты нет!'
+                });
+                return;
+            }
+            if ( !(room._doc.ownerId.toString() === ownerId)) {
                 res.status(401).send({
                     status: 401,
                     message: 'Вы не являетесь создателем данной комнаты'
                 })
                 return;
             }
-            if ( room ) {
-                res.status(200).send(room);
-                return;
-            }
-            res.status(404).send({
-                status: 404,
-                message: 'Такой комнаты нет!'
-            });
+            res.status(200).send(room);
         } catch(error){
             console.log(error.message);
             res.status(500).send({

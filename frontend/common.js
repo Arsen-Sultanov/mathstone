@@ -12,10 +12,12 @@ function query(url, config, params) {
     { ...config }
     return fetch(url, fetchParams) 
     .then((data)=> {
-        localStorage.setItem('data', data.json());
-
+        
         return data.json();
-    });
+    })
+    .then((data)=> {
+        localStorage.setItem('data', JSON.stringify(data));
+    })
 }
 
 
