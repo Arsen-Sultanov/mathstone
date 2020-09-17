@@ -86,6 +86,7 @@ module.exports = {
             console.log(req.body);
             const { roomId, ownerId } = req.body;
             const room = await Room.findOne({ roomId });
+            console.log(req.body);
             console.log(roomId, ownerId);
             console.log(room);
             if ( !room ) {
